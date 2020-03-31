@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<odoo>
+	<data>
+		
+		<record id="hp_classification_tree_view_id" model="ir.ui.view">
+            <field name="name">hp.Account.classifications.tree</field>
+            <field name="model">hp.classifications</field>
+            <field name="arch" type="xml">
+                <tree string="Classifications" editable="bottom">
+                    <field name="name" />
+					<field name="min" />
+					<field name="max" />
+                </tree>
+            </field>
+        </record>
+		
+		<record model="ir.actions.act_window" id="action_hp_classifications_view">
+			<field name="name">HP Account Classifications</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hp.classifications</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="hp_classification_tree_view_id"/>
+		</record>
+		
+		
+		<menuitem name="HP Account Classifications" action="action_hp_classifications_view"
+			id="menu_sub_classification_id" parent="menu_hp" sequence="4"/>
+	</data>
+</odoo>

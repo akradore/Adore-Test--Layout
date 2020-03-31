@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="deposit_hp_payment_view" model="ir.ui.view">
+            <field name="name">deposit.hp.payment.view</field>
+            <field name="model">deposit.hp.payment</field>
+            <field name="arch" type="xml">
+                <form string="Register Payment">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="payment_type" invisible = "1"/>
+                                <field name="journal_id"
+                                 string="Payment Method"
+                                 options="{'no_create': True,'no_create_edit': True}"
+                                 domain="[('store_id.member_ids','child_of',[uid])]"
+                                />
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="partner_type" invisible = "1"/>
+                                <field name="partner_id" string="Customer"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="amount"/>
+                                <field name="payment_date"/>
+                                <field name="memo"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="validate_hp_payment" type="object" string="Validate" class="btn-primary"/>
+                        <button name="validate_print_hp_payment" type="object" string="validate and print" class="btn-primary"/>
+                        <button special="cancel" string="Close" type="object" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="deposit_hp_payment_view_inherit" model="ir.ui.view">
+            <field name="name">deposit.hp.payment.view.inherit</field>
+            <field name="model">deposit.hp.payment</field>
+            <field name="groups_id" eval="[(4, ref('hire_purchase.group_hp_account_manager'))]"/>
+            <field name="inherit_id" ref="hire_purchase.deposit_hp_payment_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name="options">{'no_create': False,'no_create_edit': False}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="deposit_hp_payment_action" model="ir.actions.act_window">
+            <field name="name">Deposit Payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">deposit.hp.payment</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="deposit_hp_payment_view"/>
+        </record>
+
+    </data>
+</odoo>

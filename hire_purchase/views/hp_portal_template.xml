@@ -1,0 +1,86 @@
+<odoo>
+	<template id="portal_my_home_menu_hp" name="Portal layout : hp menu entries" inherit_id="portal.portal_breadcrumbs" priority="32">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'hp'" t-attf-class="breadcrumb-item #{'active ' if not invoice else ''}">
+                <a t-if="hp" t-attf-href="/my/hps?{{ keep_query() }}">HP Accounts</a>
+                <t t-else="">HP Account</t>
+            </li>
+            <li t-if="hp" class="breadcrumb-item active">
+                <t t-esc="hp.hp_id" t-if="hp.hp_id"/>
+                <t t-else=""><em>Draft</em></t>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_hps" name="Portal My Home : hp entries" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-if="hp_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">HP Accounts</t>
+                <t t-set="url" t-value="'/my/hps'"/>
+                <t t-set="count" t-value="hp_count"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_hps" name="My HP Accounts">
+    	<t t-call="portal.portal_layout">
+        <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+        <t t-call="portal.portal_searchbar">
+            <t t-set="title">HP Accounts</t>
+        </t>
+        <t t-if="not hps">
+            <p>There are currently no hps for your account.</p>
+        </t>
+        <t t-if="hps" t-call="portal.portal_table">
+            <thead>
+                <tr class="active">
+                    <th>HP Account Number</th>
+                    <th>Agreement Type</th>
+                    <th>Applied Amount</th>
+                    <th>Sanctioned Amount</th>
+                    <th>Tenure(Months)</th>
+                    <th>Interest Rate(%)</th>
+                    <th>State of hp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-foreach="hps" t-as="hp">
+                    <tr>
+                        <td>
+	                        <t t-esc="hp.hp_id" t-if="hp.hp_id"/>
+	                        <em t-else="">Draft</em>
+                        </td>
+                        <td><span t-field="hp.hp_type"/></td>
+                        <td><span t-esc="hp.req_amt" /></td>
+                        <td><span t-esc="hp.hp_amount" /></td>
+                        <td><span t-esc="hp.total_installment" /></td>
+                        <td><span t-esc="hp.interest_rate" /></td>
+                        <td class="tx_status">
+                            <t t-if="hp.state == 'draft'">
+                                <span class="badge badge-pill badge-info"><i aria-label="Review" title="Opened" role="img"></i><span class="d-none d-md-inline">Application Review</span></span>
+                            </t>
+                            <t t-if="hp.state == 'apply'">
+                                <span class="badge badge-pill badge-info"><i aria-label="Approved" title="Paid" role="img"></i><span class="d-none d-md-inline">Application Approved</span></span>
+                            </t>
+                            <t t-if="hp.state == 'partial'">
+                            	<span class="badge badge-pill badge-info"><i  aria-label="Partially Disbursed" title="Paid" role="img"></i><span class="d-none d-md-inline">Partially Disbursed</span></span>
+
+                            </t>
+                            <t t-if="hp.state == 'approved'">
+                                <span class="badge badge-pill badge-info"><i  aria-label="Disbursed" title="Disbursed" role="img"></i><span class="d-none d-md-inline">Disbursed</span></span>
+                            </t>
+                            <t t-if="hp.state == 'done'">
+                                <span class="badge badge-pill badge-info"><i  aria-label="Closed" title="Closed" role="img"></i><span class="d-none d-md-inline">Closed</span></span>
+                            </t>
+                            <t t-if="hp.state == 'cancel'">
+                                <span class="badge badge-pill badge-info"><i  aria-label="Declined" title="Declined" role="img"></i><span class="d-none d-md-inline">Declined</span></span>
+                            </t>
+                        </td>
+                    </tr>
+                </t>
+            </tbody>
+        </t>
+      </t>
+    </template>
+</odoo>

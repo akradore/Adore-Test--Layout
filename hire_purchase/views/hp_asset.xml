@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+    <template id="assets_backend_hp_id" name="Open HP Form" inherit_id="web.assets_backend">
+        <xpath expr=".">
+            <link rel="stylesheet" href="/hire_purchase/static/src/css/hp_layout.css"/>
+            <link rel="stylesheet" href="/hire_purchase/static/src/css/aec_hp_stages_layout.css"/>
+            <link rel="stylesheet" href="/hire_purchase/static/src/css/widget.css"/>
+            <link rel="stylesheet" href="/hire_purchase/static/src/css/hp_agreement.css"/>
+            <script type="text/javascript" src="/hire_purchase/static/src/js/widget.js"></script>
+            <script type="text/javascript" src="/hire_purchase/static/src/js/proof_attachment_view.js"></script>
+            <script type="text/javascript" src="/hire_purchase/static/src/js/list_view_radio.js"></script>
+        </xpath>
+    </template>
+	</data>
+</odoo>

@@ -1,0 +1,74 @@
+	<odoo>
+	<data>
+
+		<report id="action_report_payment_receipt"
+				model="account.hp"
+				string="Payment Receipt"
+				report_type="qweb-pdf"
+				name="hire_purchase.report_payment_receipt"
+				file="hire_purchase.report_payment_receipt" />
+
+		 <report string="HP Account Paper"
+				 model="account.hp"
+				 name="hire_purchase.merge_letter"
+				 id="letter_letter_info"
+				 file="hire_purchase.merge_letter"
+				 report_type="qweb-pdf"/>
+
+
+	 	<report string="HP Account Details"
+				model="account.hp"
+				name="hire_purchase.hp_info"
+				id="account_hp_id"
+				file="hire_purchase.hp_info"
+				report_type="qweb-pdf"/>
+
+		<record id="hp_agreement_report_paperformat" model="report.paperformat">
+			<field name="name">HP Agreement paperformat</field>
+			<field name="default" eval="True"/>
+			<field name="format">A4</field>
+			<field name="page_height">0</field>
+			<field name="page_width">0</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">00</field>
+			<field name="margin_bottom">10</field>
+			<field name="margin_left">7</field>
+			<field name="margin_right">7</field>
+			<field name="header_line" eval="False"/>
+			<field name="dpi">90</field>
+		</record>
+
+		<report
+            id="action_report_credit_application"
+            string="HP Agreement"
+            model="account.hp"
+            report_type="qweb-pdf"
+            file="hire_purchase.report_saleorder_credit_application"
+            name="hire_purchase.report_saleorder_credit_application"
+			paperformat="hire_purchase.hp_agreement_report_paperformat"
+        />
+
+		<record id="hp_report_paperformat" model="report.paperformat">
+			<field name="name">HP Account paperformat</field>
+			<field name="default" eval="True"/>
+			<field name="format">A4</field>
+			<field name="orientation">Landscape</field>
+			<field name="margin_top">40</field>
+			<field name="margin_bottom">20</field>
+			<field name="margin_left">7</field>
+			<field name="margin_right">7</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">35</field>
+			<field name="dpi">90</field>
+		</record>
+
+		<report string="Payment Receipt"
+				model="payment.receipt.wizard"
+				name="hire_purchase.payment_receipt_report"
+				id="payment_receipt_id"
+				file="hire_purchase.payment_receipt_report"
+				report_type="qweb-pdf"
+				paperformat="hire_purchase.hp_report_paperformat"/>
+
+	</data>
+</odoo>

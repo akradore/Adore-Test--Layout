@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+         <!-- Main Root HP Menu -->
+        <menuitem id="main_root_hp" name="HP"
+			web_icon="hire_purchase,static/description/hp_icon.jpg" sequence="4"
+			groups="hire_purchase.group_hp_account_user,hire_purchase.group_hp_account_manager" />
+
+		<menuitem name="HP Account Configuration" id="menu_hp" parent="main_root_hp"
+			sequence="6" groups="hire_purchase.group_hp_account_manager" />
+
+          <!-- HP Installment Period Menu in Config-->
+        <record model="ir.ui.view" id="view_hp_installment_period_form">
+			<field name="name">hp.installment.period.form</field>
+			<field name="model">hp.installment.period</field>
+			<field name="arch" type="xml">
+				<form string="HP Account Period">
+					<group col="4" colspan="4">
+						<field name="name"/>
+						<field name="period"/>
+					</group>
+				</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="view_hp_installment_period_tree">
+			<field name="name">hp.installment.period.tree</field>
+			<field name="model">hp.installment.period</field>
+			<field name="arch" type="xml">
+				<tree string="HP Account Period">
+					<field name="name" />
+					<field name="period" />
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_hp_installment_period">
+			<field name="name">HP Account Period</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hp.installment.period</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem name="HP Account Period" action="action_hp_installment_period"
+			id="menu_hp_installment_period" parent="menu_hp" sequence="2" />
+
+        <!-- HP Installment Menu in Config-->
+        <record model="ir.ui.view" id="view_account_hp_installment_form">
+			<field name="name">account.hp.installment.form</field>
+			<field name="model">account.hp.installment</field>
+			<field name="arch" type="xml">
+				<form string="Installments">
+					<header>
+						<field name="state" widget="statusbar" statusbar_visible="draft,paid" />
+					</header>
+					<group col="4" colspan="4">
+						<field name="partner_id" />
+						<field name="hp_id" domain="[('partner_id','=',partner_id)]" />
+						<field name="name" />
+						<field name="capital" />
+						<field name="interest" />
+						<field name="fees" />
+						<field name="total" />
+						<newline></newline>
+						<field name="date" />
+						<field name="due_principal" readonly="1" />
+						<field name="due_interest" readonly="1" />
+						<field name="due_fees" readonly="1" />
+						<field name="installment_due" readonly="1" />
+					</group>
+					<field name="fee_lines" >
+						<tree>
+							<field name="product_id"/>
+							<field name="base"/>
+							<field name="tax"/>
+							<field name="base_paid"/>
+							<field name="tax_paid"/>
+							<field name="is_paid" readonly="1"/>
+						</tree>
+					</field>
+				</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="view_account_hp_installment_tree2">
+			<field name="name">account.hp.installment.tree</field>
+			<field name="model">account.hp.installment</field>
+			<field name="arch" type="xml">
+				<tree string="Installments">
+					<field name="partner_id" />
+					<field name="hp_id" domain="[('partner_id','=',partner_id)]" />
+					<field name="name" />
+					<field name="capital" sum="Total Principal" />
+					<field name="interest" sum="Total Interest" />
+					<field name="fees" sum="Total Fees" />
+					<field name="total" sum="Total" />
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_account_hp_installment_form">
+			<field name="name">Installment</field>
+			<field name="res_model">account.hp.installment</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem name="Installment" id="menu_account_hp_installment_form"
+			action="action_account_hp_installment_form" parent="menu_hp"
+			sequence="5" />
+
+		<!-- Proof Type Menu in Config-->
+		<record model="ir.ui.view" id="view_hp_proof_type_form">
+			<field name="name">account.hp.proof.type.form</field>
+			<field name="model">account.hp.proof.type</field>
+			<field name="arch" type="xml">
+				<form string="HP Account Proof Type">
+					<group col="4" colspan="4">
+						<field name="name" />
+						<field name="shortcut" />
+					</group>
+				</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="view_hp_proof_type_tree">
+			<field name="name">account.hp.proof.type.tree</field>
+			<field name="model">account.hp.proof.type</field>
+			<field name="arch" type="xml">
+				<tree string="HP Account Proof Type">
+					<field name="name" />
+					<field name="shortcut" />
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_hp_proof_type">
+			<field name="name">HP Account Proof Type</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.hp.proof.type</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem name="Proof Type" action="action_hp_proof_type" id="menu_hp_proof_type"
+				parent="menu_hp" sequence="3" />
+
+    </data>
+</odoo>

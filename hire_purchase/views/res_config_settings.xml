@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.base.setup</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="100"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block " data-string="Frontier Integration" string="Frontier Integration"
+                     data-key="hire_purchase">
+                    <div id="frontier_integration">
+                        <h2>Frontier Integration</h2>
+                    </div>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <h3>Select Mode For Environment</h3>
+                                <span class="text-mute"></span>
+                                <div class="content-group">
+                                    <div class="mt16 row">
+                                        <label for="mode" string="Mode"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="mode" class="oe_inline"/>
+                                    </div>
+                                </div>
+<!--                                <span class="text-mute">URL's used to connect to Frontier API.</span>-->
+                                <div class="content-group" attrs="{'invisible':[('mode', '!=', 'prod')]}">
+                                    <div class="mt16 row">
+                                        <label for="production_url" string="Production Environment URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="production_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+
+                                 <div class="content-group" attrs="{'invisible':[('mode', '!=', 'test')]}">
+                                    <div class="mt16 row">
+                                        <label for="test_url" string="Testing Environment URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="test_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+<!--                                <span class="text-mute">Enter Username and Password to connect Frontier API.</span>-->
+                                <div class="content-group" attrs="{'invisible':[('mode', '!=', 'prod')]}">
+                                    <div class="mt16">
+                                        <label for="prod_username" string="PROD API Username"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="prod_username" class="oe_inline"/>
+                                    </div>
+                                    <div class="mt16">
+                                        <label for="prod_password" string="PROD API Password"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="prod_password" class="oe_inline"/>
+                                    </div>
+                                </div>
+
+                                <div class="content-group" attrs="{'invisible':[('mode', '!=', 'test')]}">
+                                    <div class="mt16">
+                                        <label for="test_username" string="Test API Username"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="test_username" class="oe_inline"/>
+                                    </div>
+                                    <div class="mt16">
+                                        <label for="test_password" string="Test API Password"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="test_password" class="oe_inline"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="qc_api"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label string="QuickCheck (QC) API" for="qc_api"/>
+                                <div class="text-muted">
+                                    For Enable QuickCheck API
+                                </div>
+
+                                <div class="content-group" attrs="{'invisible':['|',('mode', '=', 'test'),('qc_api', '=', False)]}">
+                                    <div class="mt16 row">
+                                        <label for="qc_app_prod_url" string="QC App PROD URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="qc_app_prod_url" class="oe_inline" widget="url"/>
+                                    </div>
+
+                                    <div class="mt16 row">
+                                        <label for="qc_offer_prod_url" string="QC Offer PROD URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="qc_offer_prod_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+                                <div class="content-group" attrs="{'invisible':['|',('mode', '=', 'prod'), ('qc_api', '=', False)]}">
+                                    <div class="mt16 row">
+                                        <label for="qc_app_test_url" string="QC App Test URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="qc_app_test_url" class="oe_inline" widget="url"/>
+                                    </div>
+
+                                     <div class="mt16 row">
+                                        <label for="qc_offer_test_url" string="QC Offer Test URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="qc_offer_test_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div class="text-muted">
+                                    For Create Application
+                                </div>
+                                <div class="content-group" attrs="{'invisible':[('qc_api', '=', False)]}">
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '!=', 'test')]}">
+                                        <label for="test_create_application_url" string="Create Application TEST URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="test_create_application_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '=', 'test')]}">
+                                        <label for="prod_create_application_url" string="Create Application PROD URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="prod_create_application_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div class="text-muted">
+                                    For Checking Missing Document
+                                </div>
+                                <div class="content-group" attrs="{'invisible':[('qc_api', '=', False)]}">
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '!=', 'test')]}">
+                                        <label for="test_document_missing_url" string="Check Document Missing TEST URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="test_document_missing_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '=', 'test')]}">
+                                        <label for="prod_document_missing_url" string="Check Document Missing PROD URL"
+                                               class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="prod_document_missing_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div class="text-muted">
+                                    For Checking Application Status
+                                </div>
+                                <div class="content-group" attrs="{'invisible':[('qc_api', '=', False)]}">
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '!=', 'test')]}">
+                                        <label for="application_status_test_url" class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="application_status_test_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '=', 'test')]}">
+                                        <label for="application_status_prod_url" class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="application_status_prod_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div class="text-muted">
+                                    For Uploadng Documents
+                                </div>
+                                <div class="content-group" attrs="{'invisible':[('qc_api', '=', False)]}">
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '!=', 'test')]}">
+                                        <label for="upload_document_test_url" class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="upload_document_test_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '=', 'test')]}">
+                                        <label for="upload_document_prod_url" class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="upload_document_prod_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div class="text-muted">
+                                    For Application Takenup
+                                </div>
+                                <div class="content-group" attrs="{'invisible':[('qc_api', '=', False)]}">
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '!=', 'test')]}">
+                                        <label for="application_takenup_test_url" class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="application_takenup_test_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '=', 'test')]}">
+                                        <label for="application_takenup_prod_url" class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="application_takenup_prod_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div class="text-muted">
+                                    For Application Edit
+                                </div>
+                                <div class="content-group" attrs="{'invisible':[('qc_api', '=', False)]}">
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '!=', 'test')]}">
+                                        <label for="application_edit_test_url" class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="application_edit_test_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                    <div class="mt16 row" attrs="{'invisible':[('mode', '=', 'test')]}">
+                                        <label for="application_edit_prod_url" class="col-xs-3 col-md-3 o_light_label"/>
+                                        <field name="application_edit_prod_url" class="oe_inline" widget="url"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_frontier_configuration" model="ir.actions.act_window">
+        <field name="name">Frontier Integration</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'hire_purchase'}</field>
+    </record>
+
+    <menuitem id="frontier_integration_menu" name="Frontier Integration"
+              action="hire_purchase.action_frontier_configuration"
+              parent="base.menu_administration"  sequence='0'/>
+
+</odoo>

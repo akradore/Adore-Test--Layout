@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="formview_account_hp_hptype">
+			<field name="name">account.hp.hptype.form</field>
+			<field name="model">account.hp.hptype</field>
+			<field name="arch" type="xml">
+				<form string="Interest List">
+					<group col="4" colspan="4">
+						<field name="name" />
+						<field name="calculation" />
+						<field name="company_id"/>
+						<field name="deposit_percentage"/>
+						<field name="initiation_fee"/>
+						<field name="store_deposit_limit"/>
+						<field name="finance_charges"/>
+						<field name="account_id"/>
+						<field name="is_default_type"/>
+					</group>
+					<field name="interestversion_ids" colspan="4" />
+					<separator colspan="4" string="HP Component"/>
+					<field name="hp_component_ids">
+						<form string='HP Component'>
+							<group col="4" colspan="4">
+								<field name="sequence"/>
+								<field name="type"/>
+								<field name="product_id"/>
+								<field name="gl_code"/>
+								<field name="tax_id" domain="[('type_tax_use','=','sale')]" widget="many2many_tags"/>
+								<field name="grace_period" attrs="{'invisible':[('type','in',['late_fee'])]}"/>
+								<field name="tenure" attrs="{'invisible':[('type','in',['late_fee','principal','int_rate'])]}"/>
+								<field name="insurance_fee_type" widget="radio" attrs="{'invisible':[('type','in',['late_fee','principal','int_rate','fees'])]}"/>
+							</group>
+							<separator colspan="4" string="Computation" attrs="{'invisible':['|',('type','in',['principal','int_rate']),('type','=',False)]}"/>
+							<group attrs="{'invisible':['|',('type','in',['principal','int_rate']),('type','=',False)]}">
+								<field name="amount_select" attrs="{'required':[('type','in',['fees','late_fee'])]}"/><newline/>
+	                            <field name="amount_percentage_base" widget="many2many_tags" attrs="{'invisible':[('amount_select','!=','percentage')], 'required': [('amount_select','=','percentage'),('type','in',['fees','late_fee'])]}"/><newline/>
+	                            <field name="quantity" attrs="{'invisible':[('amount_select','=','code')], 'required':[('amount_select','!=','code'),('type','in',['fees','late_fee'])]}"/><newline/>
+	                            <field name="amount_fix"  attrs="{'invisible':[('amount_select','!=','fix')], 'required':[('amount_select','=','fix'),('type','in',['fees','late_fee'])]}"/><newline/>
+	                            <field colspan="4" name="amount_python_compute" attrs="{'invisible':[('amount_select','!=','code')], 'required':[('amount_select','=','code'),('type','in',['fees','late_fee'])]}"/>
+	                            <field name="amount_percentage" attrs="{'invisible':[('amount_select','!=','percentage')], 'required':[('amount_select','=','percentage'),('type','in',['fees','late_fee'])]}"/>
+                            </group>
+						</form>
+						<tree string='HP Component'>
+							<field name="sequence"/>
+								<field name="type"/>
+								<field name="product_id"/>
+								<field name="gl_code"/>
+								<field name="tax_id" widget="many2many_tags"/>
+								<field name="tenure" attrs="{'invisible':[('type','in',['late_fee','principal','int_rate'])]}"/>
+								<field name="grace_period" attrs="{'invisible':[('type','in',['late_fee'])]}"/>
+						</tree>
+					</field>
+					<separator colspan="4" string="Document Proof"/>
+					<field name="prooftypes" colspan="4" rowspan="1">
+						<tree>
+							<field name="name" />
+							<field name="shortcut" />
+							<field name="is_mandatory" />
+						</tree>
+					</field>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="treeview_account_hp_hptype">
+			<field name="name">account.hp.hptype.tree</field>
+			<field name="model">account.hp.hptype</field>
+			<field name="arch" type="xml">
+				<tree string="Agreement Types">
+					<field name="name" />
+					<field name="calculation" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_account_hp_hptype">
+			<field name="name">Agreement Types</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.hp.hptype</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem name="Agreement Type &amp; Interest Rate" id="menu_interest"
+			parent="menu_hp" />
+		<menuitem name="Agreement Types" action="action_account_hp_hptype"
+			id="menu_account_hp_hptype" parent="menu_interest" />
+
+		<record model="ir.ui.view" id="formview_account_hp_hptype_interestversion">
+			<field name="name">account.hp.hptype.interestversion.form</field>
+			<field name="model">account.hp.hptype.interestversion</field>
+			<field name="arch" type="xml">
+				<form string="HPType Interest Version">
+					<group col="4" colspan="4">
+						<field name="name" />
+						<field name="sequence" />
+						<field name="start_date" />
+						<field name="end_date" />
+						<field name="active" />
+					</group>
+					<newline />
+					<field name="interestversionline_ids" colspan="3" />
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="treeview_account_hp_hptype_interestversion">
+			<field name="name">account.hp.hptype.interestversion.tree</field>
+			<field name="model">account.hp.hptype.interestversion</field>
+			<field name="arch" type="xml">
+				<tree string="Interest Version">
+					<field name="name" />
+					<field name="start_date" />
+					<field name="end_date" />
+					<field name="sequence" />
+					<field name="active" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_account_hp_hptype_interestversion">
+			<field name="name">Interest Version</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.hp.hptype.interestversion</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem name="Interest Version" action="action_account_hp_hptype_interestversion"
+			id="menu_account_hp_hptype_interestversion" parent="menu_interest" />
+
+		<record model="ir.ui.view"
+			id="formview_account_hp_hptype_interestversionline">
+			<field name="name">account.hp.hptype.interestversionline.form
+			</field>
+			<field name="model">account.hp.hptype.interestversionline</field>
+			<field name="arch" type="xml">
+				<form string="Interest Version Line">
+					<group col="4" colspan="4">
+						<field name="name" />
+						<field name="min_month" />
+						<field name="max_month" />
+						<field name="min_amount" />
+						<field name="max_amount" />
+						<field name="rate" />
+						<field name="sequence" />
+					</group>
+				</form>
+			</field>
+		</record>
+		<record model="ir.ui.view"
+			id="treeview_account_hp_hptype_interestversionline">
+			<field name="name">account.hp.hptype.interestversionline.tree
+			</field>
+			<field name="model">account.hp.hptype.interestversionline</field>
+			<field name="arch" type="xml">
+				<tree string="HP Interest Version Line">
+					<field name="name" />
+					<field name="min_month" />
+					<field name="max_month" />
+					<field name="min_amount" />
+					<field name="max_amount" />
+					<field name="rate" />
+					<field name="sequence" />
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window"
+			id="action_account_hp_hptype_interestversionline">
+			<field name="name">HP Interest Version Line</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.hp.hptype.interestversionline</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+	</data>
+</openerp>

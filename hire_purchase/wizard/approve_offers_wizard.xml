@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="approve_offer_view" model="ir.ui.view">
+            <field name="name">approve.offer.view</field>
+            <field name="model">approve.offers</field>
+            <field name="arch" type="xml">
+                <form string="Offers">
+                    <field name="offer_ids" string="">
+                        <tree create="0" editable="botton">
+                            <field name="is_selected_offer" widget="tree_view_radio"/>
+                            <field name="term"/>
+                            <field name="instalment"/>
+                            <field name="offer_id" invisible="1"/>
+                            <field name="hp_amount"/>
+                            <field name="adminfee"/>
+                            <field name="interest"/>
+                            <field name="interest_rate"/>
+                            <field name="initiation_fee"/>
+                            <field name="insurance_amt"/>
+                            <field name="life_insurance_amount"/>
+                            <field name="total_vat"/>
+                            <field name="tcoc"/>
+                            <field name="settlement_amount"/>
+                            <field name="first_instalment_date"/>
+                            <field name="payment_freq"/>
+                            <field name="deposit_amt"/>
+                            <field name="deposit_per"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button name="approve_hp_application" type="object" string="Approve"/>
+                        <button special="cancel" string="Close" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="form_application_status_wizard" model="ir.ui.view">
+            <field name="name">form.application.status.wizard</field>
+            <field name="model">approve.offers</field>
+            <field name="arch" type="xml">
+                <form string="HP Application Status">
+                    <sheet>
+                        <group>
+                            <field name="hp_application_status" readonly="1"/>
+                        </group>
+                        <group invisible="context.get('display_queue',1)">
+                            <field name="hp_queue_code" readonly="1"/>
+                            <field name="hp_queue_description" readonly="1"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button special="cancel" string="Close" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="cancel_hp_wizard_view" model="ir.ui.view">
+            <field name="name">cancel.hp.wizard.view</field>
+            <field name="model">approve.offers</field>
+            <field name="arch" type="xml">
+                <form string="Cancel HP">
+                    <sheet>
+                        <group>
+                            <field name="cancel_reason" required="1" string="Reason"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="cancel_hp" type="object" string="Submit"/>
+                        <button special="cancel" string="Close" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="cancel_hp_wizard_action" model="ir.actions.act_window">
+            <field name="name">Cancel HP</field>
+            <field name="res_model">approve.offers</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_hp_account_id':active_id,'api_action':'cancel'}</field>
+            <field name="view_id" ref="cancel_hp_wizard_view"/>
+        </record>
+        <record id="decline_hp_wizard_action" model="ir.actions.act_window">
+            <field name="name">Decline HP</field>
+            <field name="res_model">approve.offers</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_hp_account_id':active_id,'api_action':'decline'}</field>
+            <field name="view_id" ref="cancel_hp_wizard_view"/>
+        </record>
+
+    </data>
+</odoo>

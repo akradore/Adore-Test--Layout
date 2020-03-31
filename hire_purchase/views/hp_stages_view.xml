@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+ <!-- Task types -->
+        <record id="hp_states_search" model="ir.ui.view">
+            <field name="name">hp.stages.search</field>
+            <field name="model">hp.stages</field>
+            <field name="arch" type="xml">
+                <search string="HP Stages">
+                   <field name="name" string="HP Stages"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="hp_stages_form" model="ir.ui.view">
+            <field name="name">hp.stages.form</field>
+            <field name="model">hp.stages</field>
+            <field name="arch" type="xml">
+                <form string="HP Stage" edit="0">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="mail_template_id"/>
+                                <field name="state"/>
+                            </group>
+                            <group>
+                                <field name="fold"/>
+                                <field name="sequence" />
+                            </group>
+                        </group>
+                        <group string="Stage Description and Tooltips">
+                            <p class="text-muted" colspan="2">
+                                At each stage employees can block or make HP approve or decline ready for next stage.
+                                You can define here labels that will be displayed for the state instead
+                                of the default labels.
+                            </p>
+                            <label for="legend_normal" string=" " class="o_status oe_project_kanban_legend"/>
+                            <field name="legend_normal" nolabel="1"/>
+                            <label for="legend_blocked" string=" " class="o_status o_status_red oe_project_kanban_legend"/>
+                            <field name="legend_blocked" nolabel="1"/>
+                            <label for="legend_done" string=" " class="o_status o_status_green oe_project_kanban_legend"/>
+                            <field name="legend_done" nolabel="1"/>
+
+                            <p class="text-muted" colspan="2">
+                                You can also give a tooltip about the use of the stars available in the kanban and form views.
+                            </p>
+                            <label for="legend_priority" string=" " class="fa fa-star fa-lg o_star_on oe_project_kanban_legend"/>
+                            <field name="legend_priority" nolabel="1"/>
+
+                            <p class="text-muted" colspan="2">
+                                You can also add a description to help your coworkers understand the meaning and purpose of the stage.
+                            </p>
+                            <field name="description" placeholder="Add a description..." nolabel="1" colspan="2"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hp_stages_tree" model="ir.ui.view">
+            <field name="name">hp.stages.tree</field>
+            <field name="model">hp.stages</field>
+            <field name="arch" type="xml">
+                <tree string="Task Stage">
+                    <field name="sequence" widget="handle" />
+                    <field name="name"/>
+                    <field name="fold"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hp_stages_kanban" model="ir.ui.view">
+            <field name="name">hp.stages.kanban</field>
+            <field name="model">hp.stages</field>
+            <field name="arch" type="xml">
+                <kanban edit="false" class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="fold"/>
+                    <field name="description"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <strong><t t-esc="record.name.value"/></strong>
+                                    </div>
+                                </div>
+                                <t t-if="record.description.value">
+                                    <hr class="mt8 mb8"/>
+                                    <t t-esc="record.description.value"/>
+                                </t>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="open_hp_stages_action" model="ir.actions.act_window">
+            <field name="name">Stages</field>
+            <field name="res_model">hp.stages</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="hp_stages_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a stage in the HP pipeline.
+              </p>
+            </field>
+        </record>
+        
+    <menuitem name="Stages" id="menu_stages"
+			parent="hire_purchase.menu_hp" sequence="10"/>
+	<menuitem action="open_hp_stages_action" id="menu_hp_config_for_stages" name="Stages" parent="menu_stages"/>
+
+</odoo>

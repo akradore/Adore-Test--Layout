@@ -1,0 +1,169 @@
+<odoo>
+    <data>
+
+        <record id="inherit_view_account_payment_form" model="ir.ui.view">
+            <field name="name">inherit.view.account.payment.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position='replace'></xpath>
+                <xpath expr="//field[@name='payment_type']" position="after">
+                    <xpath expr="//field[@name='journal_id']" position="move"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_type']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_type']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//sheet" position='after'>
+                    <footer>
+                        <field name="state" invisible="1"/>
+                        <button string='Validate' name="post" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="maximum_deal_amount" readonly="1"/>
+                    <field name="store_id"/>
+                    <field name="is_partner_credit" invisible="1"/>
+                    <field name="hp_approved" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                        <field name="sale_type"/>
+                        <field name="hp_type"
+                               domain="['|',('company_id','=',False),('company_id','=',company_id)]"
+                               attrs="{'readonly':1,'required':[('sale_type','=','hire_purchase')],
+                                'invisible': [('sale_type', '!=', 'hire_purchase')]
+                               }"
+                        />
+                        <field name="is_gpi" attrs="{'invisible': [('sale_type', '!=', 'hire_purchase')]}"/>
+                        <field name="is_cli" attrs="{'invisible': [('sale_type', '!=', 'hire_purchase')], 'readonly':1}"/>
+                </xpath>
+                <xpath expr="//group[@name='sale_shipping']" position="after">
+                    <group string="Deposit Override Details" name="deposit_override_details" attrs="{'invisible':[('override_type','=',False)]}">
+                        <field name="override_type" readonly="1"/>
+                        <field name="approved_deposit" readonly="1"/>
+                        <field name="deposit_overrider_reason" readonly=""/>
+                        <field name="deposit_approval_code" readonly="1"/>
+                    </group>
+                </xpath>
+
+                <xpath expr="//form/header/button[@name='action_confirm'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['sent']), '&amp;', ('sale_type',
+                        '=', 'hire_purchase'), ('hp_approved', '=', False)]}
+                    </attribute>
+                </xpath>
+
+                <xpath expr="//form/header/button[@name='action_confirm'][2]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft']), '&amp;', ('sale_type', '=', 'hire_purchase'), ('hp_approved', '=', False)]}
+                    </attribute>
+                </xpath>
+
+                <xpath expr="//form/header/button[@name='%(sale.action_view_sale_advance_payment_inv)d'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|','|', ('invoice_status', '!=', 'to invoice'), ('is_partner_credit', '!=', True)]}</attribute>
+<!--                    <attribute name="string">YO</attribute>-->
+                </xpath>
+
+                <xpath expr="//form/header/button[@name='%(sale.action_view_sale_advance_payment_inv)d'][2]" position="attributes">
+                   <attribute name="attrs">{'invisible': ['|','|', ('invoice_status', '!=', 'no'), ('state', '!=', 'sale'), ('is_partner_credit', '!=', True)]}</attribute>
+                </xpath>
+
+                <xpath expr="//form/header" position="inside">
+                    <button name="action_register_lay-by_payment" class="oe_highlight"
+                            string="Register Lay-By Payment" type="object"
+                            attrs="{'invisible': ['|', ('state', 'not in', ['sale']), ('sale_type', '!=', 'lay_by')]}"/>
+
+                    <button name="submit_hp_application" class="oe_highlight"
+                            string="Submit HP Application" type="object"
+                            attrs="{'invisible': ['|', '|',('state', 'not in', ['draft', 'sent']), ('sale_type', 'in', ['hire_purchase','lay_by']),('hp_count', '!=', 0)]}"/>
+
+                    <button name="open_deposite_form" class="oe_highlight"
+                            string="Quick Check Offer" type="object"
+                            attrs="{'invisible': ['|', '|',('state', 'not in', ['draft', 'sent']), ('sale_type', '!=', 'hire_purchase'),('hp_count', '!=', 0)]}"/>
+
+                    <button name="%(quick_check_override_action)d" type="action" string="Override Deposit"
+                        attrs="{'invisible':['|', '|',('sale_type','!=','hire_purchase'),('state','not in',['draft','sent']),('hp_count', '!=', 0)]}"
+                    />
+
+                    <button name="action_sale_register_payment" id="sale_payment_btn"
+							type="object"  string="Register Payment" class="oe_highlight"
+							attrs="{'invisible':['|', '|',('state','not in',['draft','sent','sale','done']), ('invoice_count','!=',0),('sale_type', '=', 'hire_purchase')]}"/>
+                </xpath>
+
+                <xpath expr="//form/sheet/div[@name='button_box']" position="inside">
+                    <button name="action_view_HP" type="object" class="oe_stat_button" icon="fa-credit-card"
+                            attrs="{'invisible': [('hp_count', '=', 0)]}">
+                        <field name="hp_count" widget="statinfo" string="HP Account"/>
+                    </button>
+                </xpath>
+
+                <xpath expr="//form/sheet/notebook/page[@name='order_lines']/field[@name='order_line']"
+                       position="attributes">
+                    <attribute name="context">{'store_id': store_id}</attribute>
+                </xpath>
+
+                <xpath expr="//form/sheet/notebook" position="inside">
+                    <page string="Repayment Calculator"  attrs="{'invisible': [('hp_count', '=', 0)]}">
+                        <group col="6" colspan="4">
+                            <label for="hp_amt"/>
+                            <field name="hp_amt"/>
+                            <newline/>
+                            <label for="month"/>
+                            <field name="month"/>
+                            <newline/>
+                            <label for="int_rate"/>
+                            <field name="int_rate"/>
+                            <newline/>
+                            <group class="hp-custom" string="Reducing Interest">
+                                <newline/>
+
+                                <field name="emi_cal"/>
+                                <newline/>
+                                <field name="tot_amt"/>
+                                <newline/>
+                                <field name="flat_pa"/>
+                                <newline/>
+                                <field name="flat_pm"/>
+                                <newline/>
+                                <field name="tot_int_amt"/>
+                                <newline/>
+                                <field name="yr_int_amt"/>
+                                <newline/>
+                            </group>
+                            <group></group>
+                            <group class="hp-custom" string="Flat Interest">
+                                <newline/>
+                                <field name="flat_emi_cal"/>
+                                <newline/>
+                                <field name="flat_tot_amt"/>
+                                <newline/>
+                                <field name="flat_pa1" invisible="1"/>
+                                <newline/>
+                                <field name="flat_pm1" invisible="1"/>
+                                <newline/>
+                                <field name="flat_tot_int_amt"/>
+                                <newline/>
+                                <field name="flat_yr_int_amt"/>
+                                <newline/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

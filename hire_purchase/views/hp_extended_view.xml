@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="hp_extended_form" model="ir.ui.view">
+            <field name="name">hp.extended.form</field>
+            <field name="model">hp.extended</field>
+            <field name="arch" type="xml">
+                <form string="HP Account Extended">
+                    <group>
+                        <field name="date" class="oe_inline"/>
+                        <field name="period_id" class="oe_inline"/>
+                    </group>
+                    <footer>
+                        <button name="extend_period" type="object" string="Extended Period" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    
+        <record id="action_hp_extended" model="ir.actions.act_window">
+            <field name="name">HP Account Extended</field>
+            <field name="res_model">hp.extended</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="hp_extended_form"/>
+            <field name="target">new</field>
+        </record>
+</odoo>

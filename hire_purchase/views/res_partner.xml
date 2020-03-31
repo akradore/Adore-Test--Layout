@@ -1,0 +1,335 @@
+<?xml version="1.0"?>
+<odoo>
+	<data>
+        <record id="view_partner_property_form_inherit" model="ir.ui.view">
+            <field name="name">view.partner.property.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='banks']" position="replace">
+                </xpath>
+            </field>
+        </record>
+	<!-- Inherited res.partner form-->
+		<record model="ir.ui.view" id="view_res_partner_form">
+			<field name="name">res.partner.form.inherit</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="arch" type="xml">
+                <xpath expr="//field[@name='parent_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//label[@name='address_name']" position="replace">
+                    <b>Address</b>
+                </xpath>
+                <xpath expr="//field[@name='street']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='city']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='country_id']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='zip']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state_id']" position="attributes">
+                    <attribute name="options">{'no_create':True,'no_create_edit':True}</attribute>
+                </xpath>
+                <xpath expr="//form/sheet" position="before">
+                    <header>
+                        <button name="action_quick_check_api" string="Quick Check" type="object" class="btn-primary"/>
+                    </header>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="attrs">{'readonly':[('company_type','=','person')]}</attribute>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='title']" position="attributes">
+                    <attribute name="options">{'no_create':True,'no_create_edit':True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='type']" position="before">
+                    <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='title']" position="move"/>
+                    <field name="first_name"
+                           attrs="{'invisible':[('company_type','!=','person')],'required':[('company_type','=','person')]}"/>
+                    <field name="surname"
+                           attrs="{'invisible':[('company_type','!=','person')],'required':[('company_type','=','person')]}"/>
+                    <field name="id_type" widget="radio" class="o_light_label" attrs="{'required':[('company_type','=','person')]}" options="{'horizontal': true}"/>
+                    <field name="id_no" attrs="{'required':[('id_type', '=', 'R')]}"/>
+                    <field name="income" attrs="{'readonly':[('income_expense_id','!=',False)]}"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]//group[1]" position="attributes">
+                    <attribute name="string">Personal Details</attribute>
+                </xpath>
+                <xpath expr="//field[@name='function']" position="before">
+                    <field name="initials" attrs="{'invisible':[('company_type', '!=', 'person')]}"/>
+                    <field name="dob" attrs="{'required':[('company_type','=','person')]}"/>
+                    <field name="gender" attrs="{'required':[('company_type','=','person')]}"/>
+                    <field name="mobile" widget="phone" options="{'enable_sms': True}"/>
+                    <field name="ethnic_group"/>
+                    <field name="declared_expense" attrs="{'invisible':[('company_type', '!=', 'person')],'readonly':[('income_expense_id','!=',False)]}"/>
+                    <field name="income_expense_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]/group[1]" position="after">
+                    <group>
+                        <group>
+                            <field name="period_at_address" attrs="{'invisible':[('company_type', '!=', 'person')]}"/>
+                        </group>
+                        <group>
+                            <field name="previous_address" attrs="{'invisible':[('company_type', '!=', 'person')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="is_readonly" invisible="1"/>
+                            <field name="marital_status" attrs="{'invisible':[('company_type', '!=', 'person')]}"/>
+                            <field name="is_owner_or_tenant" attrs="{'invisible':[('company_type', '!=', 'person')]}"/>
+                            <field name="is_own_vehical" attrs="{'invisible':[('company_type', '!=', 'person')]}"/>
+                        </group>
+                        <group>
+                            <field name="how_u_married" attrs="{'invisible':[('company_type', '!=', 'person')]}"/>
+                            <field name="prefered_lang" attrs="{'invisible':[('company_type', '!=', 'person')]}"/>
+                            <field name="home_lang" attrs="{'invisible':[('company_type', '!=', 'person')]}"/>
+                            <field name="vip_status" attrs="{'invisible':['|',('company_type', '!=', 'person'),('parent_id', '!=', False)]}"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]//group[1]/group[2]" position="inside">
+                    <xpath expr="//field[@name='function']" position="move"/>
+                </xpath>
+                <xpath expr="//form[1]/sheet[1]//group[last()]/group[1]" position="inside">
+                    <xpath expr="//field[@name='vat']" position="move"/>
+                    <button string="Income &amp; Expenses" type="object" highlight="1"
+                            name="open_income_expense" icon="fa-money" class="bg-info text-light"/>
+                </xpath>
+                <field name="company_type" position="after">
+					<field name="is_group" string="Is Group"
+						attrs="{'invisible':[('company_type', '!=', 'company')]}" class="oe_edit_only" />
+					<label for="is_group"
+						attrs="{'invisible':[('company_type', '!=', 'company')]}" class="oe_edit_only" />
+				</field>
+                    <!-- Add your fields or attributes here -->
+                <xpath expr="//div[@name='button_box']/button[@name='%(sale.act_res_partner_2_sale_order)d']" position="after">
+					<button string="HP Account Details" type="action"
+						name="%(hire_purchase.action_open_hp_account_details)d" class="oe_stat_button"
+						icon="fa-credit-card" />
+
+<!--                    <button string="Quick Check API" type="object"-->
+<!--						name="action_quick_check_api" class="oe_stat_button"-->
+<!--						icon="fa-credit-card" />-->
+
+<!--                    <button string="Income &amp; Expenses" type="action"-->
+<!--						name="%(hire_purchase.action_partner_income_expense_form)d" class="oe_stat_button"-->
+<!--						icon="fa-money"/>-->
+<!--				</div>-->
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[1]" position="before">
+                    <page string="Spouse Details"  attrs="{'invisible': [('company_type', '!=', 'person')]}">
+                        <group>
+                            <group>
+                                <field name="spouse_name"/>
+                                <field name="spouse_surname"/>
+                                <field name="spouse_cell_no" string="Cell" widget="phone"/>
+                                <field name="spouse_department"/>
+                            </group>
+                            <group>
+                                <field name="spouse_work_telephone" widget="phone" string="Work Telephone"/>
+                                <field name="spouse_id_type"/>
+                                <field name="spouse_id_no"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Employment Details"  attrs="{'invisible': [('company_type', '!=', 'person')]}">
+                        <group>
+                        <group>
+                           <field name="emp_company_name"/>
+                            <label for="emp_work_street" string="Address"/>
+                            <div class="o_address_format">
+                                <field name="emp_work_street" placeholder="Street..." class="o_address_street"/>
+                                <field name="emp_work_street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="emp_work_city" placeholder="City" class="o_address_city"/>
+                                <field name="emp_work_state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True,'no_create':True, 'no_create_edit':True}" context="{'country_id': country_id, 'zip': zip}"/>
+                                <field name="emp_work_zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="emp_work_country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            </div>
+                           </group>
+                        <group>
+                            <field name="occupation"/>
+                            <field name="months_employed"/>
+                            <field name="emp_department"/>
+                            <field name="emp_work_telephone" widget="phone"/>
+                            <field name="salary_pay_date"/>
+                            <field name="salary_freq"/>
+                        </group>
+                    </group>
+                    </page>
+
+                    <page string="Reference Details"  attrs="{'invisible': [('company_type', '!=', 'person')]}">
+                        <group>
+                        <group>
+                           <field name="relationship"/>
+                            <field name="ref_surname" string="Surname"/>
+                            <field name="ref_name" string="Name"/>
+                            <label for="ref_work_street" string="Address"/>
+                            <div class="o_address_format">
+                                <field name="ref_work_street" placeholder="Street..." class="o_address_street"/>
+                                <field name="ref_work_street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="ref_work_city" placeholder="City" class="o_address_city"/>
+                                <field name="ref_work_state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True,'no_create':True,'no_create_edit':True}" context="{'country_id': country_id, 'zip': zip}"/>
+                                <field name="ref_work_zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="ref_work_country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            </div>
+                           </group>
+                        <group>
+                            <field name="ref_title" options="{'no_create':True, 'no_create_edit':True}"/>
+                            <field name="ref_initials" string="Initials"/>
+                            <field name="ref_work_telephone" string="Work Telephone" widget="phone"/>
+                            <field name="ref_home_telephone" string="Home Telephone" widget="phone"/>
+                            <field name="ref_mobile" widget="phone"/>
+                        </group>
+                    </group>
+                    </page>
+
+                    <page string="Friend Details" attrs="{'invisible': [('company_type', '!=', 'person')]}">
+                        <group>
+                            <group>
+                                <field name="friend_name"/>
+                                <field name="friend_home_telephone" string="Work Telephone" widget="phone"/>
+                                <field name="friend_employer"/>
+                            </group>
+                            <group>
+                                <field name="friend_surname"/>
+                                <field name="friend_work_telephone" string="Home Telephone" widget="phone"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Bank Details">
+                        <field name="is_readonly" invisible="1"/>
+                        <field name="bank_ids" nolabel="1" attrs="{'readonly':[('is_readonly','=',True)]}">
+                            <tree>
+                                <field name="sequence" widget="handle"/>
+                                <field name="bank_id"/>
+                                <field name="acc_number"/>
+                                <field name="acc_holder_name" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+			</field>
+		</record>
+        <record id="sms_res_partner_view_form_inherit" model="ir.ui.view">
+            <field name="name">sms.res.partner.view.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="sms.res_partner_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='mobile']" position="replace"/>
+                <xpath expr="//div[hasclass('o_row')][2]" position="replace"/>
+            </field>
+        </record>
+        <record id="product_view_partner_property_form_inherit" model="ir.ui.view">
+            <field name="name">product.view.partner.property.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="product.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='property_product_pricelist']" position="after">
+                    <field name="hp_agreement_type"
+                           attrs="{'invisible': [('is_company','=',False),('parent_id','!=',False)]}"
+                           groups="sales_team.group_sale_manager,account.group_account_manager"/>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_partner_filter">
+			<field name="name">res.partner.filter.inherit</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_res_partner_filter" />
+			<field name="arch" type="xml">
+				<filter name="type_company" position="after">
+					<filter string="Groups" name="is_group" domain="[('is_group','=',1)]" />
+				</filter>
+                <xpath expr="//search" position="inside">
+                    <field name="id_no" filter_domain="[('id_no','ilike',self)]" />
+                </xpath>
+			</field>
+		</record>
+        <record id="base_view_res_bank_form_inherit" model="ir.ui.view">
+            <field name="name">base.view_res.bank.form.inherit</field>
+            <field name="model">res.bank</field>
+            <field name="inherit_id" ref="base.view_res_bank_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='bic']" position="after">
+                    <field name="short_code"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_partner_bank_form_inherit" model="ir.ui.view">
+            <field name="name">view.partner.bank.form.inherit</field>
+            <field name="model">res.partner.bank</field>
+            <field name="inherit_id" ref="base.view_partner_bank_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='acc_type']" position="after">
+                    <field name="account_type"/>
+										<field name="acc_branch_name"/>
+										<field name="acc_branch_code"/>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='bank_id']" position="attributes">
+                    <attribute name="options">{'no_create': True,'no_create_edit': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="options">{'no_create': True,'no_create_edit': True}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="base_view_partner_form_fields_access" model="ir.ui.view">
+            <field name="name">base.view.partner.form.fields.access</field>
+            <field name="model">res.partner</field>
+            <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='title']" position="attributes">
+                    <attribute name="options">{'no_create': False,'no_create_edit':False}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state_id']" position="attributes">
+                    <attribute name="options">{'no_create': False,'no_create_edit':False}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_form_inherit_field_access" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.field.access</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="hire_purchase.view_res_partner_form"/>
+            <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='ref_title']" position="attributes">
+                    <attribute name="options">{'no_create': False,'no_create_edit':False}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='ref_work_state_id']" position="attributes">
+                    <attribute name="options">{'no_create': False,'no_create_edit':False}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='emp_work_state_id']" position="attributes">
+                    <attribute name="options">{'no_create': False,'no_create_edit':False}</attribute>
+                </xpath>
+            </field>
+        </record>
+        <!-- Inherit Form View to Modify it -->
+        <record id="access_base_view_partner_bank_form" model="ir.ui.view">
+            <field name="name">access.base.view.partner.bank.form</field>
+            <field name="model">res.partner.bank</field>
+            <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+            <field name="inherit_id" ref="base.view_partner_bank_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='bank_id']" position="attributes">
+                    <attribute name="options">{'no_create': False,'no_create_edit': False}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="options">{'no_create': False,'no_create_edit': False}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

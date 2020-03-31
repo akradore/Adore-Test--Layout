@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="ir_cron_check_hp_application_status" model="ir.cron">
+            <field name="name">HP: Check application Status</field>
+            <field name="model_id" ref="hire_purchase.model_account_hp"/>
+            <field name="state">code</field>
+            <field name="code">model.hp_application_status_cron()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+        <record id="ir_cron_cancel_hp_non_taken_up" model="ir.cron">
+            <field name="name">HP: Check HP Non taken Up</field>
+            <field name="model_id" ref="hire_purchase.model_account_hp"/>
+            <field name="state">code</field>
+            <field name="code">model.hp_application_staus_ntu_cron()</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 07:00:00')" />
+            <field name="interval_number">24</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

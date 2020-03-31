@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="normal_risk_hp" model="hp.classifications">
+            <field name="name">Normal Risk</field>
+            <field name="min">0</field>
+            <field name="max">29</field>
+        </record>
+        <record id="watch_hp" model="hp.classifications">
+            <field name="name">Watch</field>
+            <field name="min">30</field>
+            <field name="max">89</field>
+        </record>
+
+        <record id="sub_standard_hp" model="hp.classifications">
+            <field name="name">Sub Standard</field>
+            <field name="min">90</field>
+            <field name="max">179</field>
+        </record>
+
+        <record id="doubtful_hp" model="hp.classifications">
+            <field name="name">Doubtful</field>
+            <field name="min">180</field>
+            <field name="max">269</field>
+        </record>
+
+        <record id="loss_hp" model="hp.classifications">
+            <field name="name">Loss</field>
+            <field name="min">270</field>
+            <field name="max">360</field>
+        </record>
+
+        <record id="write_off_hp" model="hp.classifications">
+            <field name="name">Write off</field>
+            <field name="min">360</field>
+            <field name="max">100000</field>
+        </record>
+
+</data>
+</odoo>

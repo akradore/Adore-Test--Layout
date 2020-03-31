@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="menu_hp_charges_tree" model="ir.ui.view">
+            <field name="name">menu.hp.charges.tree</field>
+            <field name="model">hp.charges</field>
+            <field name="arch" type="xml">
+                <tree string="Hp Charges">
+                    <field name="date"/>
+                    <field name="hp_account_id"/>
+                    <field name="partner_id"/>
+                    <field name="description"/>
+                    <field name="amount"/>
+                </tree>
+            </field>
+        </record>
+        <record id="menu_hp_charges_action" model="ir.actions.act_window">
+            <field name="name">Hp Charges</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hp.charges</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hp_charges" 
+                  name="Hp Charges" 
+                  parent="hire_purchase.menu_hp"
+                  action="menu_hp_charges_action" 
+                  sequence="5"/>
+    </data>
+</odoo>

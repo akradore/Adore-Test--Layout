@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+		<record id="action_all_hp_accounts" model="ir.actions.act_window">
+			<field name="name">HP Account Details</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+			<!--This action used from res.partner button -->
+		<record id="action_open_hp_account_details" model="ir.actions.act_window">
+			<field name="name">HP Account Details</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_partner_id':
+				active_id,'default_partner_id': active_id}</field>
+		</record>
+
+        <!--This action used from Dashbord New HP ACCount Label -->
+		<record id="action_draft_state_hp_account" model="ir.actions.act_window">
+			<field name="name">HP Account Details</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_state': 'draft'}</field>
+		</record>
+
+		<!--This action used from Dashbord Sanctioned HP Account Label -->
+		<record id="action_apply_state_hp_account" model="ir.actions.act_window">
+			<field name="name">HP Account Details</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_state': 'apply'}</field>
+		</record>
+
+		<!--This action used from Dashbord Partially Disbursed HP Account Label -->
+		<record id="action_partial_state_hp_account" model="ir.actions.act_window">
+			<field name="name">HP Account Details</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_state': 'partial'}</field>
+		</record>
+
+		<!--This action used from Dashbord Disbursed HP Account Label -->
+		<record id="action_approved_state_hp_account" model="ir.actions.act_window">
+			<field name="name">HP Account Details</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_state': 'approved'}</field>
+		</record>
+
+		<!--This action used from Dashbord Done HP Account Label -->
+		<record id="action_done_state_hp_account" model="ir.actions.act_window">
+			<field name="name">HP Account Details</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_state': 'done'}</field>
+		</record>
+
+		<!--This action used from Dashbord Declined HP Account Label -->
+		<record id="action_cancel_state_hp_account" model="ir.actions.act_window">
+			<field name="name">HP Account Details</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_state': 'cancel'}</field>
+		</record>
+
+		<!--This action used from Dashbord New HP Application Button -->
+		<record id="action_new_hp_account_details" model="ir.actions.act_window">
+			<field name="name">HP Account Details</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">form</field>
+		</record>
+
+		<record model="ir.ui.view" id="acc_hp_search_filter">
+			<field name="name">acc.hp.search.filter</field>
+			<field name="model">account.hp</field>
+			<field name="arch" type="xml">
+				<search string="Search HP Account Details">
+					<field name="partner_id" />
+					<field name="state" />
+					<filter name="draft" string="New" domain="[('state','=','draft')]"/>
+					<filter name="apply" string="HP Account Sanctioned" domain="[('state','=','apply')]"/>
+					<filter name="partial" string="Partially Disbursed" domain="[('state','=','partial')]"/>
+					<filter name="approved" string="HP Account Disbursed" domain="[('state','=','approved')]"/>
+					<filter name="done" string="Done" domain="[('state','=','done')]"/>
+					<filter name="cancel" string="Rejected" domain="[('state','=','cancel')]"/>
+					<group expand="0" name="group_by" string="Group By">
+                       	<filter name="group_city" string="City" context="{'group_by':'city'}"/>
+                   </group>
+				</search>
+			</field>
+		</record>
+
+		<record id="account_hp_graph" model="ir.ui.view">
+            <field name="name">account.hp.graph</field>
+            <field name="model">account.hp</field>
+            <field name="arch" type="xml">
+                <graph string="Account HP Statistics" type="bar">
+                    <field name="apply_date"/>
+                    <field name="hp_amount" operator="+" type='measure'/>
+                </graph>
+            </field>
+        </record>
+
+		<record model="ir.ui.view" id="view_account_hp_pivot">
+			<field name="name">account.hp.pivot</field>
+			<field name="model">account.hp</field>
+			<field name="arch" type="xml">
+				<pivot string="HP Account Details">
+					<field name="partner_id" type="row" />
+					<field name="old_disburse_amt" type="measure" />
+				</pivot>
+			</field>
+		</record>
+
+        <record model="ir.ui.view" id="account_hp_tree">
+			<field name="name">account.hp.tree</field>
+			<field name="model">account.hp</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Invoice Line">
+					<field name="hp_id" />
+					<field name="name" />
+					<field name="partner_id" />
+					<field name="hp_type" />
+					<field name="hp_amount" />
+					<field name="total_installment" string="Installment" />
+					<field name="apply_date" />
+					<field name="approve_date" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+       <record model="ir.ui.view" id="account_hp_form">
+			<field name="name">account.hp.form</field>
+			<field name="model">account.hp</field>
+			<field name="arch" type="xml">
+                <form string="HP Details">
+					<header>
+						<field name="state" widget="statusbar"/>
+					</header>
+                    <header>
+                        <button name="hp_draft" states="cancel" string="Re Apply"
+                invisible="1"
+							type="object" />
+                        <button name="approve_hp_application"
+							type="object" string="View Final Offer"
+							class="oe_highlight"
+							groups="hire_purchase.group_hp_application_approver"
+							attrs="{'invisible': [('stage_id','!=',%(hire_purchase.hp_to_offer_acceptance)d)]}"
+						/>
+                        <button name="hp_paid" states="partial,approved" invisible="1" type="object"
+							string="Account Paid" />
+						<button name="%(hire_purchase.decline_hp_wizard_action)d"
+								attrs="{'invisible':['|',('stage_id','in',[%(hire_purchase.hp_to_approved)d,
+								%(hire_purchase.hp_to_declined)d,%(hire_purchase.hp_to_cancelled)d,%(hire_purchase.hp_to_cancelled_ntu)d])]}"
+								type="action" string="Decline"/>
+						<button name="%(hire_purchase.cancel_hp_wizard_action)d"
+								attrs="{'invisible':['|',('stage_id','in',[%(hire_purchase.hp_to_approved)d,%(hire_purchase.hp_to_declined)d]),
+								('state','=','cancel')
+								]}"
+								type="action" string="Cancel"/>
+
+						<button name="%(action_hp_payment)d" id="account_hp_payment_btn"
+							type="action"  string="Register HP Payment" class="oe_highlight"
+							attrs="{'invisible':[('state','not in',['approved','partial'])]}"/>
+
+						<button name="button_cancel_hp" id="account_cancel_hp_btn"
+               invisible="1"
+							type="object"  string="Void Application"
+							 class="oe_highlight"
+							confirm="Are you sure to cancel laon ??" groups="hire_purchase.group_hp_account_manager"/>
+
+						<button name="check_missing_document" type="object"  string="Check Missing Documents"
+								attrs="{'invisible':[('stage_id','not in',[%(hire_purchase.hp_to_review)d,%(hire_purchase.hp_to_pending)d])]}"
+							/>
+						<button name="check_application_status" type="object"  string="Check Application Status"
+								attrs="{'invisible':[('stage_id','!=',%(hire_purchase.hp_to_review)d)]}"
+						/>
+						<button name="upload_hp_document" type="object"  string="Send Docs to Frontier"
+								class="oe_highlight"
+								attrs="{'invisible':[('stage_id','not in',[%(hire_purchase.hp_to_review)d,
+								%(hire_purchase.hp_to_offer_acceptance)d,%(hire_purchase.hp_to_contract_deposit)d,%(hire_purchase.hp_to_reference_check)d])]}"/>
+
+						<button name="deposit_hp_payment" type="object"  string="Register Deposit Payment"
+								class="oe_highlight" attrs="{'invisible':[('stage_id','!=',%(hire_purchase.hp_to_contract_deposit)d)]}"/>
+
+						<button name="%(hire_purchase.action_wizard_receipt_report)d"
+								invisible="1"
+							type="action" string="Receipt Report" class="oe_highlight" groups="hire_purchase.group_hp_account_manager"/>
+
+						<button name="button_fees_calculation" id="account_fees_calculation_btn"
+								invisible="1"
+							type="object" string="Set Manual Entries" class="oe_highlight"
+							 groups="hire_purchase.group_hp_account_manager"/>
+
+						<button name="send_for_review" type="object" string="Send For Review"
+								attrs="{'invisible':[('stage_id','!=',%(hire_purchase.hp_to_pending)d)]}"
+								class="oe_highlight"
+						/>
+
+						<button name="%(action_hp_extended)d" type="action"  id="extended_hp_period" states="partial,approved"
+							  string="Extended HP Account Period" class="oe_highlight"
+							 groups="hire_purchase.group_hp_account_manager"/>
+                    </header>
+					<header>
+						<field name="stage_id" widget="statusbar" options="{'fold_field': 'fold'}"/>
+					</header>
+					<sheet>
+						<div class="oe_button_box" name="button_box">
+							<button name="action_view_sale_order" class="oe_stat_button" icon="fa-usd" type="object" string="Sale Order"
+									attrs="{'invisible': [('sale_order_id', '=', False)]}">
+							</button>
+
+							<button name="action_view_income_expense" class="oe_stat_button" icon="fa-usd" type="object" string="Income &amp; Expense"
+							attrs="{'invisible':[('partner_id','=',False)]}"
+							>
+							</button>
+							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-truck"
+									attrs="{'invisible': [('delivery_count', '=', 0)]}" context="{'view_delivery_order':True}">
+								<field name="delivery_count" widget="statinfo" string="Delivery"/>
+							</button>
+							<button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o"
+									  attrs="{'invisible': [('invoice_count', '=', 0)]}">
+							 <field name="invoice_count" widget="statinfo" string="Invoices"/>
+							</button>
+							<button name="action_view_payments" type="object"  class="oe_stat_button" icon="fa-money">
+								<field name="hp_payment_count" widget="statinfo" string="Payments"/>
+							</button>
+                    	</div>
+                        <label for="hp_id" string="HP Account Number" />
+						<h1>
+							<field name="hp_id" />
+						</h1>
+						<group>
+							<group>
+								<field name="name" readonly="1"/>
+								<field name="partner_id" context="{'search_default_customer':1}" readonly="1"/>
+								<field name="apply_date" readonly="1"/>
+								<field name="approve_date" readonly="1"/>
+								<field name="company_id" readonly="1"/>
+								<field name="store_id" readonly="1"/>
+								<field name="return_type"/>
+								<field name="payment_freq" readonly="1"/>
+								<field name="debit_order_date" string="Payment Date"/>
+								<field name="grace_period" string="Late Fee Grace Period (Days)" readonly="1"/>
+							</group>
+							<group>
+								<field name="user_id"/>
+								<label for="controller_id"/>
+								<div>
+									<field name="controller_id" class="oe_inline" attrs="{'readonly':True}"/>
+									<button name="hp_assign_me" type="object" string="Assign to me"
+											groups="hire_purchase.group_hp_account_controller"
+											class="oe_link oe_inline text-uppercase"
+                      attrs="{'invisible':[('stage_id','!=',%(hire_purchase.hp_to_review)d)]}"
+									/>
+								</div>
+								<field name="is_gpi" readonly="1"/>
+								<field name="is_cli" readonly="1"/>
+								<label for="reference_checks_done"/>
+								<div>
+									<field name="reference_checks_done" class="oe_inline"/>
+									<button name="confirm_reference_check" type="object" string="Confirm Reference Check"
+											attrs="{'invisible':['|',('reference_checks_done','=',True),('state','!=','draft')]}"
+											class="oe_link oe_inline text-uppercase"
+											groups="hire_purchase.group_hp_account_controller"
+									/>
+								</div>
+								<field name="classification" readonly="1"/>
+								<field name="missing_documents" readonly="1"/>
+								<field name="customer_signature" widget="signature"
+									   attrs="{'invisible':[('stage_id','!=',%(hire_purchase.hp_to_contract_deposit)d)],'readonly':[('customer_signature','!=',False)]}"/>
+								<field name="is_group" invisible="1"/>
+								<field name="sale_order_id" invisible="1"/>
+								<field name="is_collateral" invisible="1"/>
+								<field name="interest_type" invisible="1"/>
+							</group>
+							<notebook colspan="4">
+								<page string="HP">
+									<group col="6" colspan="4">
+										<field name="hp_type" domain="[('company_id','=',company_id)]" readonly="1" />
+										<field name="hp_period" readonly="1" />
+										<!-- <field name="contact" domain="[('partner_id','=',partner_id)]"/> -->
+
+										<field name="req_amt" readonly="1" />
+										<field name="deposit_per" readonly="1" />
+										<field name="deposit_amt" readonly="1" />
+										<field name="hp_amount" string="Approved Amount" readonly="1" />
+
+										<field name="total_installment" readonly="1"/>
+
+										<field name="interest_rate" readonly="1" />
+										<field name="interest" readonly="1"/>
+                    <field name="arrears_interest_rate" readonly="1" />
+										<field name="initiation_fee" readonly="1" />
+                    <field name="finance_charges" readonly="1" />
+									</group>
+									<separator string="Repayment Calculations" colspan="4" />
+									<field name="installment_id" colspan="4" nolabel="1">
+										<tree string="Installments" editable="bottom">
+											<field name="partner_id" invisible="1" />
+											<field name="hp_id" invisible="1"
+												domain="[('partner_id','=',partner_id)]" />
+											<field name="date" readonly="1" />
+											<field name="name" readonly="1" />
+											<field name="capital" sum="Total Principal" readonly="1" />
+											<field name="initiation_fee" sum="Total Initiation Fee" readonly="1" />
+											<field name="interest" sum="Total Interest" readonly="1" />
+											<field name="fees" sum="Total Fees" readonly="1" />
+											<field name="gpi" sum="Total GPI" attrs="{'column_invisible':[('parent.is_gpi', '=', False)]}" readonly="1" />
+											<field name="cli" sum="Total CLI" attrs="{'column_invisible':[('parent.is_cli', '=', False)]}" readonly="1" />
+											<field name="total" sum="Total" readonly="1" />
+											<field name="due_principal" sum="Principal Due" readonly="1" invisible="1"/>
+											<field name="due_interest" sum="Interest Due" readonly="1" invisible="1"/>
+											<field name="due_fees" sum="Fee Due" readonly="1" invisible="1"/>
+											<field name="due_gpi" sum="Total GPI Due" attrs="{'column_invisible':[('parent.is_gpi', '=', False)]}" readonly="1"  invisible="1"/>
+											<field name="due_cli" sum="Total CLI Due" attrs="{'column_invisible':[('parent.is_cli', '=', False)]}" readonly="1" invisible="1"/>
+											<field name="installment_due" sum="Installment Due" readonly="1" invisible="1"/>
+											<field name="outstanding_prin" sum="Ouststanding Principle" readonly="1" invisible="1"/>
+											<field name="outstanding_int" sum="Ouststanding Interest" readonly="1" invisible="1"/>
+											<field name="outstanding_fees" sum="Ouststanding Fees" readonly="1" invisible="1"/>
+											<field name="outstanding_gpi" sum="Total Outstanding GPI" attrs="{'column_invisible':[('parent.is_gpi', '=', False)]}" readonly="1" invisible="1"/>
+											<field name="outstanding_cli" sum="Total Outstanding CLI" attrs="{'column_invisible':[('parent.is_cli', '=', False)]}" readonly="1" invisible="1"/>
+											<field name="late_fee" sum="Late Fee" readonly="1" invisible="1"/>
+											<field name="state" readonly="1" />
+											<field name="is_post" invisible="1"/>
+											<button name="post" id="account_hp_payment_btn" type="object"  string="Post" class="oe_highlight" attrs="{'invisible':[('is_post','=',True)]}"/>
+										</tree>
+									</field>
+								</page>
+
+								<page string="Supporting Documents">
+									<group colspan="4" col="4">
+										<field name="id" invisible="1" />
+										<field name="proof_id" colspan="4" nolabel="1"
+											context="{'hp_type':hp_type}">
+											<tree>
+												<field name="type"/>
+												<field name="proof_name" />
+												<field name="state"/>
+												<field name="upload_status" string="In Frontier?"/>
+												<field name="attachment_id" widget="attachment_preview" attrs="{'invisible':[('attachment_url','=',False)]}"/>
+												<field name="attachment_url" invisible="1"/>
+												<button name="proof_varified" type="object" string="" icon="fa-check" class="text-light bg-success"
+												attrs="{'invisible':[('state','!=','apply')]}"
+												/>
+												<button name="proof_canceled" type="object" states="apply" icon="fa-times" class="text-light bg-danger"
+												attrs="{'invisible':[('state','!=','apply')]}"
+												/>
+											</tree>
+											<form string="Proof Document">
+												<header>
+													<button name="apply_varification" type="object"
+														states="draft" string="Apply For Verification"
+														attrs="{'invisible':['|',('hp_id', '=', False)]}"/>
+													<button name="proof_varified" type="object" states="apply"
+														string="Accept" />
+													<button name="proof_canceled" type="object" states="apply"
+														string="Refuse" />
+													<field name="state" widget="statusbar"
+														statusbar_visible="draft,apply,done" />
+												</header>
+												<sheet>
+													<group class="hp-custom">
+														<field name="type" required="1" attrs="{'readonly':[('state','in',['done'])]}"/>
+														<field name="proof_name" attrs="{'readonly':[('state','in',['done'])]}"/>
+														<field name="hp_id" required="0" invisible="1" />
+														<newline />
+														<field name="note" colspan="4"  attrs="{'readonly':[('state','in',['done'])]}"/>
+														<newline />
+														<field name="document" colspan="4" filename="file_name" attrs="{'readonly':[('state','in',['done'])]}"/>
+														<field name="file_name" invisible="1"/>
+														<newline />
+													</group>
+												</sheet>
+											</form>
+										</field>
+										<group class="hp-custom" col="4" colspan="4">
+											<field name="proof_1" />
+											<field name="proof_2" />
+										</group>
+									</group>
+								</page>
+								<page string="Accounting">
+									<group colspan="4" col="4">
+										<field name="anal_acc" readonly="1" />
+										<field name="proc_fee" />
+									</group>
+									<newline />
+									<field name="move_id" colspan="4" nolabel="1" >
+										<tree string="Journal Items" create="false">
+						                    <field name="date"/>
+						                    <field name="move_id" required="0" groups="account.group_account_user"/>
+						                    <field name="journal_id" options='{"no_open":True}'/>
+						                    <field name="name"/>
+						                    <field name="ref"/>
+						                    <field name="statement_id" invisible="1"/>
+						                    <field name="partner_id"/>
+						                    <field name="account_id" options='{"no_open":True}' domain="[('company_id', '=', company_id)]" groups="account.group_account_user,hire_purchase.group_hp_account_manager,hire_purchase.group_hp_account_user"/>
+						                    <field name="analytic_account_id" groups="account.group_account_user,hire_purchase.group_hp_account_manager,hire_purchase.group_hp_account_user"/>
+						                    <field name="reconciled" invisible="1"/>
+						                    <field name="full_reconcile_id"/>
+						                    <field name="debit" sum="Total Debit"/>
+						                    <field name="credit" sum="Total Credit"/>
+						                    <field name="amount_currency" readonly="True" groups="base.group_multi_currency,hire_purchase.group_hp_account_manager,hire_purchase.group_hp_account_user"/>
+						                    <field name="currency_id" readonly="True" invisible="1" />
+						                    <field name="date_maturity"/>
+						                    <field name="company_currency_id" invisible="1"/>
+						                    <field name="company_id" invisible="1"/>
+						                </tree>
+									</field>
+								</page>
+								<page name="payment" string="Payment Schedule">
+									<separator string="Payment Schedule" colspan="4" />
+									<field name="payment_schedule_ids" colspan="4" nolabel="1">
+										<tree string="Installments">
+											<field name="partner_id" invisible="1" />
+											<field name="hp_id" invisible="1"
+												domain="[('partner_id','=',partner_id)]" />
+											<field name="date" />
+											<field name="name" />
+											<field name="capital" sum="Total Principal" />
+											<field name="interest" sum="Total Interest" />
+											<field name="fees" sum="Total Fees" />
+											<field name="gpi" sum="Total GPI" attrs="{'column_invisible':[('parent.is_gpi', '=', False)]}"/>
+											<field name="cli" sum="Total CLI" attrs="{'column_invisible':[('parent.is_cli', '=', False)]}"/>
+											<field name="total" sum="Total" />
+										</tree>
+										<form string="Installments">
+										<group>
+											<field name="partner_id" invisible="1" />
+											<field name="hp_id" invisible="1" domain="[('partner_id','=',partner_id)]" />
+											<field name="date" />
+											<field name="name" />
+											<field name="capital" sum="Total Principal" />
+											<field name="interest" sum="Total Interest" />
+											<field name="fees" sum="Total Fees" />
+											<field name="total" sum="Total" />
+											<field name="installment_id" readonly="1" widget="many2many_tags" />
+											</group>
+										</form>
+									</field>
+								</page>
+								<page string="Notes">
+									<separator string="Terms and Conditions" colspan="4" />
+									<field name="notes" colspan="4" nolabel="1" />
+
+									<separator string="Stage Reason" colspan="4" />
+									<field name="stage_reason" colspan="4" nolabel="1" readonly="1"/>
+								</page>
+								<page string="Repayment Calculator">
+									<group col="6" colspan="4">
+										<label for="hp_amt" />
+										<field name="hp_amt" />
+										<newline />
+										<label for="month" />
+										<field name="month" />
+										<newline />
+										<label for="int_rate" />
+										<field name="int_rate" />
+										<newline />
+										<separator string="Monthly Payment (EMI)" colspan="2" />
+										<group colspan="2">
+											<button name="cal_amt" class="btn-primary" string="Calculate"
+												type="object" />
+											<button name="reset_values" class="btn-primary"
+												string="Reset" type="object" />
+										</group>
+
+										<newline />
+
+										<group class="hp-custom" string="Reducing Interest">
+											<newline />
+
+											<field name="emi_cal" />
+											<newline />
+											<field name="tot_amt" />
+											<newline />
+											<field name="flat_pa" />
+											<newline />
+											<field name="flat_pm" />
+											<newline />
+											<field name="tot_int_amt" />
+											<newline />
+											<field name="yr_int_amt" />
+											<newline />
+										</group>
+										<group></group>
+										<group class="hp-custom" string="Flat Interest">
+											<newline />
+											<field name="flat_emi_cal" />
+											<newline />
+											<field name="flat_tot_amt" />
+											<newline />
+											<field name="flat_pa1" invisible="1" />
+											<newline />
+											<field name="flat_pm1" invisible="1" />
+											<newline />
+											<field name="flat_tot_int_amt" />
+											<newline />
+											<field name="flat_yr_int_amt" />
+											<newline />
+										</group>
+									</group>
+								</page>
+								<page string="Re-Payment Details">
+									<group>
+										<field name="total_payment" string="Total Payment"/>
+										<field name="total_principal_paid" string="Total Principal Paid"/>
+										<field name="total_interest_paid" string="Total Interest Paid"/>
+										<field name="total_fees_paid" string="Total Fees Paid"/>
+									</group>
+
+									<field name="repayment_details" string="Re-Payment Details">
+										<form>
+											<group>
+												<field name="release_number" />
+												<field name="name" />
+												<field name="pay_date" />
+												<field name="is_button_visible" invisible="0"/>
+												<field name="amt" sum="Re-Payment Total"/>
+											</group>
+										</form>
+										<tree>
+											<field name="release_number" />
+											<field name="name" />
+											<field name="pay_date" />
+											<field name="is_button_visible" invisible="1"/>
+											<field name="amt" sum="Re-Payment Total"/>
+											<button attrs="{'invisible':[('is_button_visible','=',False)]}" style="padding: 0px; background-color: transparent; border: 0px; font-size: 20px; color:red;" class="fa fa-remove" type="object" name="loan_payment_cancel" confirm="Are you sure. Do you want to continue ?"  title="Cancel"/>
+											<button attrs="{'invisible':[('is_button_visible','=',True)]}" style="padding: 0px; background-color: transparent; border: 0px; font-size: 20px;" class="fa fa-trash-o" type="object" name="delete_payment_line" confirm="Are you sure. Do you want to continue ?"  title="Delete"/>
+										</tree>
+									</field>
+								</page>
+								<page name="groups" string="Group Member"
+									attrs="{'invisible':[('is_group', '=', False)]}">
+									<field name="group_members" required="1">
+										<tree string="Group Members" editable="bottom">
+											<field name="name" />
+											<field name="hp_id" invisible="1" />
+										</tree>
+									</field>
+								</page>
+								<page name="hp_summary" string="Summary">
+									<group>
+										<group string="Contract Values" readonly="1">
+											<field name="contract_term" readonly="1"/>
+											<field name="sale_value_inc" readonly="1"/>
+											<field name="deposit_amt" readonly="1"/>
+											<field name="hp_deposit_paid" readonly="1"/>
+											<field name="hp_deposit_outstanding" readonly="1"/>
+                      						<field name="delivery_charges" readonly="1"/>
+											<field name="finance_charges" readonly="1"/>
+											<field name="contract_value_inc" readonly="1"/>
+											<field name="approve_finance_charges" readonly="1"/>
+										</group>
+										<group name="payment_details" string="Payment Details">
+											<field name="capital_instalment" readonly="1"/>
+											<field name="monthly_service_fee" readonly="1"/>
+											<field name="monthly_insurance_cost" readonly="1"/>
+											<field name="total_monthly_instalment" readonly="1"/>
+											<field name="first_payment_date" readonly="1"/>
+											<field name="final_payment_date" readonly="1"/>
+											<field name="last_payment_date" readonly="1"/>
+											<field name="last_payment_amount" readonly="1"/>
+										</group>
+									</group>
+									<group>
+										<group name="contract_summary" string="Contract Summary">
+											<field name="initial_contract_balance" readonly="1"/>
+											<field name="initial_finance_charges" readonly="1"/>
+											<field name="deposit_payment" readonly="1"/>
+											<field name="payments_made_to_date" readonly="1"/>
+											<field name="balance_remaining" readonly="1"/>
+											<field name="interest_remaining" readonly="1"/>
+											<field name="months_remaining" readonly="1"/>
+											<field name="early_settlement_amount" readonly="1"/>
+										</group>
+										<group name="other_details" string="Other Details">
+											<field name="overdue_amount" readonly="1"/>
+											<field name="months_overdue" readonly="1"/>
+											<field name="interest_overdue" readonly="1"/>
+											<field name="time_overdue" readonly="1"/>
+										</group>
+									</group>
+								</page>
+								<!--<page string="Collateral Details"&ndash;&gt;-->
+<!--									attrs="{'invisible':[('is_collateral', '=', False)]}">-->
+<!--									<field name="collateral_lines">-->
+<!--										<tree editable="bottom">-->
+<!--											<field name="type_id" required="1"/>-->
+<!--											<field name="value" required="1"/>-->
+<!--											<field name="last_date" />-->
+<!--											<field name="expiry_date" />-->
+<!--											<field name="is_registered" />-->
+<!--										</tree>-->
+<!--									</field>-->
+<!--								</page>-->
+							</notebook>
+						</group>
+                    </sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"
+							groups="base.group_user" />
+						<field name="message_ids" widget="mail_thread" />
+						<field name="activity_ids" widget="mail_activity"/>
+					</div>
+                </form>
+            </field>
+       </record>
+		
+		<record id="account_hp_form_inherit" model="ir.ui.view">
+		    <field name="name">account.hp.form.inherit</field>
+		    <field name="model">account.hp</field>
+		    <field name="inherit_id" ref="hire_purchase.account_hp_form"/>
+			<field name="groups_id" eval="[(4, ref('hire_purchase.group_hp_account_user'))]"/>
+		    <field name="arch" type="xml">
+		        <xpath expr="//field[@name='controller_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': False}</attribute>
+		        </xpath>
+		    </field>
+		</record>
+      <!-- Sub HP Account menu action -->
+		<record model="ir.actions.act_window" id="action_sub_hp_account">
+			<field name="name">Personal HP Account</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem name="HP Account" id="menu_sub_hp_account"
+			action="action_sub_hp_account" sequence="5" parent="main_root_hp" />
+
+		<!-- Approved HP Account menu action -->
+		<record model="ir.actions.act_window" id="action_account_hp_approve">
+			<field name="name">Approved HP Account</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">['|',('state','=','done'),('state','=','approved')]
+			</field>
+		</record>
+		<menuitem name="Approved HP Account" id="menu_account_hp_approve"
+			action="action_account_hp_approve" parent="menu_sub_hp_account"
+			sequence="4" />
+
+		<!--Rejected HP Account Menu action -->
+		<record model="ir.actions.act_window" id="action_account_hp_rejected">
+			<field name="name">Rejected HP Account</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('state','=','cancel')]</field>
+		</record>
+		<menuitem name="Rejected HP Account" id="menu_account_hp_rejected"
+			action="action_account_hp_rejected" parent="menu_sub_hp_account"
+			sequence="5" />
+
+		<!--HP Account Application Menu action -->
+		<record model="ir.actions.act_window" id="action_account_hp_tree_small">
+			<field name="name">HP Account Applications</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form,pivot,graph</field>
+		</record>
+		<menuitem name="HP Account Applications" id="menu_action_account_hp_tree_small"
+			action="action_account_hp_tree_small" parent="menu_sub_hp_account"
+			sequence="1" />
+
+		<record model="ir.actions.act_window" id="action_account_hp_tree_medium">
+			<field name="name">Medium HP Account</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_account_hp_tree_large">
+			<field name="name">Large HP Account</field>
+			<field name="res_model">account.hp</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+
+    </data>
+</odoo>
